@@ -114,17 +114,9 @@
             "translation": "src/locale/messages.hu.xlf",
             "baseHref": "/hu/"
           },
-          "mk": {
-            "translation": "src/locale/messages.mk.xlf",
-            "baseHref": "/mk/"
-          },
           "zh": {
             "translation": "src/locale/messages.zh.xlf",
             "baseHref": "/zh/"
-          },
-          "ro": {
-            "translation": "src/locale/messages.ro.xlf",
-            "baseHref": "/ro/"
           },
           "ru": {
             "translation": "src/locale/messages.ru.xlf",
@@ -145,6 +137,7 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
+            "aot": true,
             "assets": [
               "src/favicon.ico",
               "src/resources",
@@ -156,13 +149,7 @@
             ],
             "scripts": [
               "generated-config.js"
-            ],
-            "vendorChunk": true,
-            "extractLicenses": false,
-            "buildOptimizer": false,
-            "sourceMap": true,
-            "optimization": false,
-            "namedChunks": true
+            ]
           },
           "configurations": {
             "production": {
@@ -172,14 +159,7 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "optimization": {
-                "scripts": true,
-                "styles": {
-                  "minify": true,
-                  "inlineCritical": false
-                },
-                "fonts": true
-              },
+              "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
               "namedChunks": false,
@@ -198,8 +178,7 @@
                 }
               ]
             }
-          },
-          "defaultConfiguration": ""
+          }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -283,9 +262,7 @@
           "options": {
             "outputPath": "dist/mempool/server",
             "main": "server.ts",
-            "tsConfig": "tsconfig.server.json",
-            "sourceMap": true,
-            "optimization": false
+            "tsConfig": "tsconfig.server.json"
           },
           "configurations": {
             "production": {
@@ -300,8 +277,7 @@
               "localize": true,
               "optimization": true
             }
-          },
-          "defaultConfiguration": ""
+          }
         },
         "serve-ssr": {
           "builder": "@nguniversal/builders:ssr-dev-server",

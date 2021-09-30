@@ -40,6 +40,18 @@ export class ApiDocsComponent implements OnInit {
 
     this.hostname = `${document.location.protocol}//${this.hostname}`;
 
+    if (document.location.hostname === 'localhost') {
+      if (this.env.BASE_MODULE === 'bisq') {
+        this.hostname = `https://bisq.markets`;
+      }
+      if (this.env.BASE_MODULE === 'liquid') {
+        this.hostname = `https://liquid.network`;
+      }
+      if (this.env.BASE_MODULE === 'mempool') {
+        this.hostname = `https://mempool.space`;
+      }
+    }
+
     this.code = {
       address: {
         codeTemplate: {
@@ -2051,7 +2063,7 @@ export class ApiDocsComponent implements OnInit {
       },
       transactionCpfp: {
         codeTemplate: {
-          curl: `/api/v1/cpfp/%{1}`,
+          curl: `/api/fees/cpfp/%{1}`,
           commonJS: `
         const { %{0}: { fees } } = mempoolJS();
 

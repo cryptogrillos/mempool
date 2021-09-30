@@ -16,7 +16,7 @@
       <div class="col">
         <div class="card">
           <div class="card-body">
-            <ng-container *ngTemplateOutlet="stateService.network === 'liquid' ? lbtcPegs : mempoolTable; context: { $implicit: mempoolInfoData }"></ng-container>
+            <ng-container *ngTemplateOutlet="mempoolTable; context: { $implicit: mempoolInfoData }"></ng-container>
           </div>
         </div>
       </div>
@@ -44,21 +44,16 @@
         <div class="card graph-card">
           <div class="card-body pl-0">
             <div style="padding-left: 1.25rem;">
-              <ng-container *ngTemplateOutlet="stateService.network === 'liquid' ? lbtcPegs : mempoolTable; context: { $implicit: mempoolInfoData }"></ng-container>
+              <ng-container *ngTemplateOutlet="mempoolTable; context: { $implicit: mempoolInfoData }"></ng-container>
               <hr>
             </div>
-            <div class="mempool-graph" *ngIf="stateService.network === 'liquid'; else mempoolGraph">
-              <app-lbtc-pegs-graph [data]="liquidPegsMonth$ | async"></app-lbtc-pegs-graph>
+            <div class="mempool-graph" *ngIf="(mempoolStats$ | async) as mempoolStats; else loadingSpinner">
+              <app-mempool-graph
+                [template]="'widget'"
+                [limitFee]="150"
+                [data]="mempoolStats.mempool"
+              ></app-mempool-graph>
             </div>
-            <ng-template #mempoolGraph>
-              <div class="mempool-graph" *ngIf="(mempoolStats$ | async) as mempoolStats; else loadingSpinner">
-                <app-mempool-graph
-                  [template]="'widget'"
-                  [limitFee]="150"
-                  [data]="mempoolStats.mempool"
-                ></app-mempool-graph>
-              </div>
-            </ng-template>
           </div>
         </div>
       </div>
@@ -190,20 +185,9 @@
       <div class="card-text" *ngIf="(isLoadingWebSocket$ | async) === false && mempoolInfoData.value; else loadingbig">
         <div class="progress">
           <div class="progress-bar {{ mempoolInfoData.value.mempoolSizeProgress }}" role="progressbar" [ngStyle]="{'width': (mempoolInfoData.value.memPoolInfo.usage / mempoolInfoData.value.memPoolInfo.maxmempool * 100) + '%' }">&nbsp;</div>
-          <div class="progress-text">&lrm;<span [innerHTML]="mempoolInfoData.value.memPoolInfo.usage | bytes"></span> / <span [innerHTML]="mempoolInfoData.value.memPoolInfo.maxmempool | bytes"></span></div>
+          <div class="progress-text"><span [innerHTML]="mempoolInfoData.value.memPoolInfo.usage | bytes"></span> / <span [innerHTML]="mempoolInfoData.value.memPoolInfo.maxmempool | bytes"></span></div>
         </div>
       </div>
-    </div>
-  </div>
-</ng-template>
-
-<ng-template #lbtcPegs let-mempoolInfoData>
-  <div class="mempool-info-data">
-    <div class="item">
-      <h5 class="card-title" i18n="dashboard.lbtc-pegs-in-circulation">L-BTC in circulation</h5>
-      <ng-container *ngIf="(liquidPegsMonth$ | async) as liquidPegsMonth; else loadingTransactions">
-        <p class="card-text">{{ liquidPegsMonth.series.slice(-1)[0] | number: '1.2-2' }} <span>L-BTC</span></p>
-      </ng-container>
     </div>
   </div>
 </ng-template>
@@ -217,11 +201,12 @@
     <ng-template #inSync>
       <div class="progress inc-tx-progress-bar">
         <div class="progress-bar" role="progressbar" [ngStyle]="{'width': mempoolInfoData.value.progressWidth, 'background-color': mempoolInfoData.value.progressColor}">&nbsp;</div>
-        <div class="progress-text">&lrm;{{ mempoolInfoData.value.vBytesPerSecond | ceil | number }} <ng-container i18n="shared.vbytes-per-second|vB/s">vB/s</ng-container></div>
+        <div class="progress-text">{{ mempoolInfoData.value.vBytesPerSecond | ceil | number }} <ng-container i18n="shared.vbytes-per-second|vB/s">vB/s</ng-container></div>
       </div>
     </ng-template>
   </ng-template>
 </ng-template>
+
 
 <ng-template #difficultyEpoch>
   <div class="main-title" i18n="dashboard.difficulty-adjustment">Difficulty Adjustment</div>

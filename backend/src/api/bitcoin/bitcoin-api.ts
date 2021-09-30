@@ -1,3 +1,5 @@
+import config from '../../config';
+import * as bitcoin from '@mempool/bitcoin';
 import * as bitcoinjs from 'bitcoinjs-lib';
 import { AbstractBitcoinApi } from './bitcoin-api-abstract-factory';
 import { IBitcoinApi } from './bitcoin-api.interface';
@@ -8,10 +10,16 @@ import { TransactionExtended } from '../../mempool.interfaces';
 
 class BitcoinApi implements AbstractBitcoinApi {
   private rawMempoolCache: IBitcoinApi.RawMempool | null = null;
-  protected bitcoindClient: any;
+  private bitcoindClient: any;
 
-  constructor(bitcoinClient: any) {
-    this.bitcoindClient = bitcoinClient;
+  constructor() {
+    this.bitcoindClient = new bitcoin.Client({
+      host: config.CORE_RPC.HOST,
+      port: config.CORE_RPC.PORT,
+      user: config.CORE_RPC.USERNAME,
+      pass: config.CORE_RPC.PASSWORD,
+      timeout: 60000,
+    });
   }
 
   $getRawTransaction(txId: string, skipConversion = false, addPrevout = false): Promise<IEsploraApi.Transaction> {
@@ -98,10 +106,6 @@ class BitcoinApi implements AbstractBitcoinApi {
     return found;
   }
 
-  $sendRawTransaction(rawTransaction: string): Promise<string> {
-    return this.bitcoindClient.sendRawTransaction(rawTransaction);
-  }
-
   protected async $convertTransaction(transaction: IBitcoinApi.Transaction, addPrevout: boolean): Promise<IEsploraApi.Transaction> {
     let esploraTransaction: IEsploraApi.Transaction = {
       txid: transaction.txid,
@@ -119,8 +123,7 @@ class BitcoinApi implements AbstractBitcoinApi {
       return {
         value: vout.value * 100000000,
         scriptpubkey: vout.scriptPubKey.hex,
-        scriptpubkey_address: vout.scriptPubKey && vout.scriptPubKey.address ? vout.scriptPubKey.address
-          : vout.scriptPubKey.addresses ? vout.scriptPubKey.addresses[0] : '',
+        scriptpubkey_address: vout.scriptPubKey && vout.scriptPubKey.addresses ? vout.scriptPubKey.addresses[0] : '',
         scriptpubkey_asm: vout.scriptPubKey.asm ? this.convertScriptSigAsm(vout.scriptPubKey.asm) : '',
         scriptpubkey_type: this.translateScriptPubKeyType(vout.scriptPubKey.type),
       };

@@ -533,9 +533,6 @@ html:lang(ru) .card-title {
       }
     }
   }
-  .total-percentage-bar-background {
-    background-color: #282d47;
-  }
 }
 
 .tx-wrapper-tooltip-chart-advanced {
@@ -672,19 +669,14 @@ th {
 .reserved { color: #ff8c00 }
 
 .rtl-layout {
-    .fa-arrow-alt-circle-right {
-        @extend .fa-arrow-alt-circle-right;
+    .arrow {
+        @extend .arrow;
         -webkit-transform: scaleX(-1);
         transform: scaleX(-1);
     }
 
     .table td {
         text-align: right;
-        .fiat {
-          @extend .fiat;
-          margin-left: 0px !important;
-          margin-right: 15px;
-        }
     }
 
     .table th {
@@ -722,71 +714,6 @@ th {
 
     .bitcoin-block {
         direction: rtl;
-    }
-
-    .next-previous-blocks {
-      @extend .next-previous-blocks;
-      direction: ltr;
-    }
-
-    .tx-link {
-      @extend .tx-link;
-      margin-left: 0px;
-      margin-right: 10px;
-    }
-
-    .pagination-container {
-      @extend .pagination-container;
-      ul {
-        @extend ul;
-        padding-left: 0px;
-        padding-right: 5px;
-      }
-    }
-
-    .search-box-container {
-      @extend .search-box-container;
-      margin-right: 0 !important;
-      margin-left: 0.5rem !important;
-    }
-
-    .code {
-      @extend .code;
-      text-align: left !important;
-      direction: ltr;
-      .subtitle {
-        @extend .subtitle;
-        direction: rtl;
-        text-align: right !important;
-      }
-    }
-
-    .container-graph {
-      @extend .container-graph;
-      .formRadioGroup {
-        @extend .formRadioGroup;
-        direction: ltr;
-      }
-    }
-
-    .mempool-graph {
-      @extend .mempool-graph;
-      direction: ltr;
-    }
-    .title-block {
-      .title {
-        float: right;
-      }
-    }
-    .container-buttons {
-      float: left !important;
-      width: auto !important;
-    }
-    .tx-link {
-      margin-right: 0px;
-      @media (min-width: 768px) {
-        margin-right: 10px;
-      }
     }
 }
 

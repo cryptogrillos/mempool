@@ -20,7 +20,6 @@ import logger from './logger';
 import backendInfo from './api/backend-info';
 import loadingIndicators from './api/loading-indicators';
 import mempool from './api/mempool';
-import elementsParser from './api/liquid/elements-parser';
 
 class Server {
   private wss: WebSocket.Server | undefined;
@@ -113,7 +112,7 @@ class Server {
         await memPool.$updateMemPoolInfo();
       } catch (e) {
         const msg = `updateMempoolInfo: ${(e instanceof Error ? e.message : e)}`;
-        if (config.MEMPOOL.USE_SECOND_NODE_FOR_MINFEE) {
+        if (config.CORE_RPC_MINFEE.ENABLED) {
           logger.warn(msg);
         } else {
           logger.debug(msg);
@@ -141,15 +140,6 @@ class Server {
   setUpWebsocketHandling() {
     if (this.wss) {
       websocketHandler.setWebsocketServer(this.wss);
-    }
-    if (config.MEMPOOL.NETWORK === 'liquid') {
-      blocks.setNewBlockCallback(async () => {
-        try {
-          await elementsParser.$parse();
-        } catch (e) {
-          logger.warn('Elements parsing error: ' + (e instanceof Error ? e.message : e));
-        }
-      });
     }
     websocketHandler.setupConnectionHandling();
     statistics.setNewStatisticsEntryCallback(websocketHandler.handleNewStatistic.bind(websocketHandler));
@@ -246,7 +236,6 @@ class Server {
         .get(config.MEMPOOL.API_URL_PREFIX + 'mempool/txids', routes.getMempoolTxIds)
         .get(config.MEMPOOL.API_URL_PREFIX + 'mempool/recent', routes.getRecentMempoolTransactions)
         .get(config.MEMPOOL.API_URL_PREFIX + 'tx/:txId', routes.getTransaction)
-        .post(config.MEMPOOL.API_URL_PREFIX + 'tx', routes.$postTransaction)
         .get(config.MEMPOOL.API_URL_PREFIX + 'tx/:txId/hex', routes.getRawTransaction)
         .get(config.MEMPOOL.API_URL_PREFIX + 'tx/:txId/status', routes.getTransactionStatus)
         .get(config.MEMPOOL.API_URL_PREFIX + 'tx/:txId/outspends', routes.getTransactionOutspends)
@@ -263,12 +252,6 @@ class Server {
         .get(config.MEMPOOL.API_URL_PREFIX + 'address/:address/txs', routes.getAddressTransactions)
         .get(config.MEMPOOL.API_URL_PREFIX + 'address/:address/txs/chain/:txId', routes.getAddressTransactions)
         .get(config.MEMPOOL.API_URL_PREFIX + 'address-prefix/:prefix', routes.getAddressPrefix)
-      ;
-    }
-
-    if (config.MEMPOOL.NETWORK === 'liquid') {
-      this.app
-        .get(config.MEMPOOL.API_URL_PREFIX + 'liquid/pegs/month', routes.$getElementsPegsByMonth)
       ;
     }
   }

@@ -1,20 +1,23 @@
 import config from '../../config';
 import { AbstractBitcoinApi } from './bitcoin-api-abstract-factory';
+import { IBitcoinApi } from './bitcoin-api.interface';
 import { IEsploraApi } from './esplora-api.interface';
 import { IElectrumApi } from './electrum-api.interface';
 import BitcoinApi from './bitcoin-api';
+import mempool from '../mempool';
 import logger from '../../logger';
 import * as ElectrumClient from '@mempool/electrum-client';
 import * as sha256 from 'crypto-js/sha256';
 import * as hexEnc from 'crypto-js/enc-hex';
 import loadingIndicators from '../loading-indicators';
 import memoryCache from '../memory-cache';
+import bitcoinBaseApi from './bitcoin-base.api';
 
 class BitcoindElectrsApi extends BitcoinApi implements AbstractBitcoinApi {
   private electrumClient: any;
 
-  constructor(bitcoinClient: any) {
-    super(bitcoinClient);
+  constructor() {
+    super();
 
     const electrumConfig = { client: 'mempool-v2', version: '1.4' };
     const electrumPersistencePolicy = { retryPeriod: 10000, maxRetry: 1000, callback: null };
@@ -42,7 +45,7 @@ class BitcoindElectrsApi extends BitcoinApi implements AbstractBitcoinApi {
   }
 
   async $getAddress(address: string): Promise<IEsploraApi.Address> {
-    const addressInfo = await this.bitcoindClient.validateAddress(address);
+    const addressInfo = await bitcoinBaseApi.$validateAddress(address);
     if (!addressInfo || !addressInfo.isvalid) {
       return ({
         'address': address,
@@ -96,7 +99,7 @@ class BitcoindElectrsApi extends BitcoinApi implements AbstractBitcoinApi {
   }
 
   async $getAddressTransactions(address: string, lastSeenTxId: string): Promise<IEsploraApi.Transaction[]> {
-    const addressInfo = await this.bitcoindClient.validateAddress(address);
+    const addressInfo = await bitcoinBaseApi.$validateAddress(address);
     if (!addressInfo || !addressInfo.isvalid) {
      return [];
     }

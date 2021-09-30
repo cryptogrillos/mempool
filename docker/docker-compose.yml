@@ -1,22 +1,6 @@
 version: "3.7"
 
 services:
-
-  electrum:
-    build:
-      context: .
-      dockerfile: docker/electrum/Dockerfile
-    user: "1000:1000"
-    restart: on-failure
-    command: ""
-    ports:
-      - 50001:50001
-      - 50002:50002
-      - 4224:4224
-      - 8332:8332
-    environment:
-      ELECTRUM: "electrum"
-      # add electrs configs
   web:
     image: mempool/frontend:latest
     user: "1000:1000"
@@ -37,11 +21,11 @@ services:
     volumes:
       - ./data:/backend/cache
     environment:
-      RPC_HOST: "127.0.0.1"
-      RPC_PORT: "8332"
-      RPC_USER: "mempool"
-      RPC_PASS: "mempool"
-      ELECTRUM_HOST: "127.0.0.1"
+      RPC_HOST: "192.168.193.174"
+      RPC_PORT: "18443"
+      RPC_USER: "123"
+      RPC_PASS: "123"
+      ELECTRUM_HOST: "192.168.193.174"
       ELECTRUM_PORT: "50002"
       ELECTRUM_TLS: "false"
       MYSQL_HOST: "db"

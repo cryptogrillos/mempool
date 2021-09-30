@@ -5,9 +5,8 @@ import logger from '../logger';
 import { Common } from './common';
 import transactionUtils from './transaction-utils';
 import { IBitcoinApi } from './bitcoin/bitcoin-api.interface';
+import bitcoinBaseApi from './bitcoin/bitcoin-base.api';
 import loadingIndicators from './loading-indicators';
-import bitcoinClient from './bitcoin/bitcoin-client';
-import bitcoinSecondClient from './bitcoin/bitcoin-second-client';
 
 class Mempool {
   private static WEBSOCKET_REFRESH_RATE_MS = 10000;
@@ -62,7 +61,7 @@ class Mempool {
   }
 
   public async $updateMemPoolInfo() {
-    this.mempoolInfo = await this.$getMempoolInfo();
+    this.mempoolInfo = await bitcoinBaseApi.$getMempoolInfo();
   }
 
   public getMempoolInfo(): IBitcoinApi.MempoolInfo {
@@ -205,21 +204,6 @@ class Mempool {
         delete this.mempoolCache[tx];
       }
     }
-  }
-
-  private $getMempoolInfo() {
-    if (config.MEMPOOL.USE_SECOND_NODE_FOR_MINFEE) {
-      return Promise.all([
-        bitcoinClient.getMempoolInfo(),
-        bitcoinSecondClient.getMempoolInfo()
-      ]).then(([mempoolInfo, secondMempoolInfo]) => {
-        mempoolInfo.maxmempool = secondMempoolInfo.maxmempool;
-        mempoolInfo.mempoolminfee = secondMempoolInfo.mempoolminfee;
-        mempoolInfo.minrelaytxfee = secondMempoolInfo.minrelaytxfee;
-        return mempoolInfo;
-      });
-    }
-    return bitcoinClient.getMempoolInfo();
   }
 }
 

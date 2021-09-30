@@ -107,12 +107,7 @@ export class SearchFormComponent implements OnInit {
           this.electrsApiService.getAsset$(searchText)
             .subscribe(
               () => { this.navigate('/asset/', searchText); },
-              () => {
-                this.electrsApiService.getBlock$(searchText)
-                  .subscribe(
-                    (block) => { this.navigate('/block/', searchText, { state: { data: { block } } }); },
-                    () => { this.navigate('/tx/', searchText); });
-              }
+              () => { this.navigate('/tx/', searchText); }
             );
         } else {
           this.navigate('/tx/', searchText);
@@ -123,8 +118,8 @@ export class SearchFormComponent implements OnInit {
     }
   }
 
-  navigate(url: string, searchText: string, extras?: any) {
-    this.router.navigate([(this.network && this.stateService.env.BASE_MODULE === 'mempool' ? '/' + this.network : '') + url, searchText], extras);
+  navigate(url: string, searchText: string) {
+    this.router.navigate([(this.network && this.stateService.env.BASE_MODULE === 'mempool' ? '/' + this.network : '') + url, searchText]);
     this.searchTriggered.emit();
     this.searchForm.setValue({
       searchText: '',

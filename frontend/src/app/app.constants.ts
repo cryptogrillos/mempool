@@ -106,7 +106,7 @@ export const languages: Language[] = [
 // { code: 'lv', name: 'Latviešu' },        // Latvian
 // { code: 'lt', name: 'Lietuvių' },        // Lithuanian
    { code: 'hu', name: 'Magyar' },          // Hungarian
-   { code: 'mk', name: 'Македонски' },      // Macedonian
+// { code: 'mk', name: 'Македонски' },      // Macedonian
 // { code: 'ms', name: 'Bahasa Melayu' },   // Malay
    { code: 'nl', name: 'Nederlands' },      // Dutch
    { code: 'ja', name: '日本語' },          // Japanese
@@ -115,7 +115,7 @@ export const languages: Language[] = [
    { code: 'pl', name: 'Polski' },          // Polish
    { code: 'pt', name: 'Português' },       // Portuguese
 // { code: 'pt-BR', name: 'Português (Brazil)' }, // Portuguese (Brazil)
-   { code: 'ro', name: 'Română' },          // Romanian
+// { code: 'ro', name: 'Română' },          // Romanian
    { code: 'ru', name: 'Русский' },         // Russian
 // { code: 'sk', name: 'Slovenčina' },      // Slovak
    { code: 'sl', name: 'Slovenščina' },     // Slovenian

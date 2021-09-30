@@ -12,14 +12,13 @@
     "BLOCK_WEIGHT_UNITS": 4000000,
     "INITIAL_BLOCKS_AMOUNT": 8,
     "MEMPOOL_BLOCKS_AMOUNT": 8,
-    "PRICE_FEED_UPDATE_INTERVAL": 3600,
-    "USE_SECOND_NODE_FOR_MINFEE": false
+    "PRICE_FEED_UPDATE_INTERVAL": 3600
   },
   "CORE_RPC": {
     "HOST": "127.0.0.1",
     "PORT": 8332,
     "USERNAME": "mempool",
-    "PASSWORD": "mempool"
+    "PASSWORD": "71b61986da5b03a5694d7c7d5165ece5"
   },
   "ELECTRUM": {
     "HOST": "127.0.0.1",
@@ -29,11 +28,12 @@
   "ESPLORA": {
     "REST_API_URL": "http://127.0.0.1:3000"
   },
-  "SECOND_CORE_RPC": {
+  "CORE_RPC_MINFEE": {
+    "ENABLED": false,
     "HOST": "127.0.0.1",
     "PORT": 8332,
     "USERNAME": "mempool",
-    "PASSWORD": "mempool"
+    "PASSWORD": "mem71b61986da5b03a5694d7c7d5165ece5pool"
   },
   "DATABASE": {
     "ENABLED": true,
